@@ -28,23 +28,37 @@ def do_deploy(archive_path):
     if isfile(archive_path) is False:
         return False
 
-    first = archive_path.split('/')
-    second = first[1].split(".")
-    file_ = second[0]
-
     try:
-        put(archive_path, '/tmp')
-        run("sudo mkdir -p /data/web_static/releases/" + file_ + "/")
-        run("sudo tar -xzf /tmp/" + file_ + ".tgz" +
-            " -C /data/web_static/releases/" + file_ + "/")
-        run("sudo rm /tmp/" + file_ + ".tgz")
-        run("sudo mv /data/web_static/releases/" + file_ +
-            "/web_static/* /data/web_static/releases/" + file_ + "/")
-        run("sudo rm -rf /data/web_static/releases/" + file_ + "/web_static")
-        run("sudo rm -rf /data/web_static/current")
-        run("sudo ln -s /data/web_static/releases/" + file_ +
-            "/ /data/web_static/current")
+        fullName = archive_path.split("/")[1]
+        fileName = archive_path.split("/")[1].split(".")[0]
+        # upload file in /tmp/
+        put(archive_path, "/tmp/{}".format(fullName))
+        # create the directory to uncompress
+        cmd = "sudo mkdir -p /data/web_static/releases/{}/".format(fileName)
+        run(cmd)
+        # uncompress file
+        cmd = "sudo tar -xzf /tmp/{} -C ".format(fullName)
+        cmd += "/data/web_static/releases/{}/".format(fileName)
+        run(cmd)
+        # delete file from server
+        cmd = "sudo rm /tmp/{}".format(fullName)
+        run(cmd)
+        # move files
+        cmd = "sudo mv /data/web_static/releases/{}".format(fileName)
+        cmd += "/web_static/* "
+        cmd += "/data/web_static/releases/{}/".format(fileName)
+        run(cmd)
+        # delete folder
+        cmd = "sudo rm -rf /data/web_static/releases/{}".format(fileName)
+        cmd += "/web_static"
+        run(cmd)
+        # delete symlink
+        cmd = "sudo rm -rf /data/web_static/current"
+        run(cmd)
+        # new symlink
+        cmd = "sudo ln -s /data/web_static/releases/{}/ ".format(fileName)
+        cmd += "/data/web_static/current"
+        run(cmd)
     except Exception:
         return False
-
     return True
