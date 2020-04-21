@@ -9,6 +9,7 @@ def hello_hbnb():
     """print Hello HBNB!"""
     return "Hello HBNB!"
 
+
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
     """print HBNB"""
@@ -16,4 +17,3 @@ def hbnb():
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
-
