@@ -41,9 +41,9 @@ class DBStorage:
         result = []
         if cls is not None:
             try:
-                records = self.__session.query(cls).all()
+                result = self.__session.query(cls).all()
             except Exception:
-                records = self.__session.query(eval(cls)).all()
+                result = self.__session.query(eval(cls)).all()
         else:
             cl_list = [User, Place, State, City, Amenity, Review]
             for class_name in cl_list:
