@@ -53,13 +53,13 @@ def number_odd_or_even(n):
 
 
 @app.teardown_appcontext
-def teardown_():
+def teardown_(exc):
     """close session"""
     storage.close()
 
 
 @app.route('/states_list', strict_slashes=False)
-def states_list(n):
+def states_list():
     """print template only if  states_list"""
     var = storage.all("State")
     return render_template('7-states_list.html', var=var)
