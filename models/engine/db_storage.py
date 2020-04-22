@@ -40,7 +40,10 @@ class DBStorage:
         """ show all results """
         result = []
         if cls is not None:
-            result = self.__session.query(cls).all()
+            try:
+                records = self.__session.query(cls).all()
+            except Exception:
+                records = self.__session.query(eval(cls)).all()
         else:
             cl_list = [User, Place, State, City, Amenity, Review]
             for class_name in cl_list:
