@@ -28,7 +28,7 @@ class State(BaseModel, Base):
 
     if getenv("HBNB_TYPE_STORAGE") == "db":
         @property
-        def City(self):
+        def cities(self):
             """ get the cities """
             cities_dic = []
             for key, value in models.storage.all().items():
